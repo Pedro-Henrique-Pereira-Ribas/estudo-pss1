@@ -102,6 +102,8 @@ O site pode ser publicado diretamente a partir da branch `main`:
 3. Selecione a branch `main` e a pasta `/ (root)`.
 4. Salve e aguarde a publicação.
 
+Em contas gratuitas, o GitHub Pages publica apenas repositórios **públicos**. Se o repositório estiver privado, altere a visibilidade em **Settings → General → Danger Zone** ou use um plano que permita Pages em repositórios privados.
+
 Endereço esperado:
 
 ```text
