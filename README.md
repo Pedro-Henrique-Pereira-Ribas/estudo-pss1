@@ -11,6 +11,7 @@ O projeto é feito em HTML, CSS e JavaScript puros: não precisa de instalação
 - **102 flashcards** para revisão ativa.
 - **150 questões** comentadas, organizadas por matéria e tópico.
 - **Simulado geral** com questões sorteadas e cronômetro.
+- **Tema claro e escuro**, com botão de alternância, preferência salva e respeito ao tema do sistema.
 - **Progresso local**: tópicos estudados, melhores notas, histórico de simulados, flashcards e anotações.
 - **Exportar/importar progresso** em JSON e opção de apagar os dados.
 
@@ -20,7 +21,7 @@ O projeto é feito em HTML, CSS e JavaScript puros: não precisa de instalação
 2. Navegue pelas matérias no menu lateral.
 3. Use os flashcards, faça os quizzes e acompanhe tudo em **Meu progresso**.
 
-O progresso fica salvo no `localStorage` do próprio navegador, na chave `pss1-caderno-v1`. Ele não é enviado para nenhum servidor. Se você limpar os dados do navegador, o histórico é apagado; por isso, exporte um backup de vez em quando na página de progresso.
+O progresso fica salvo no `localStorage` do próprio navegador, na chave `pss1-caderno-v1`. A preferência de tema usa a chave `pss1-tema`. Nada é enviado para nenhum servidor. Se você limpar os dados do navegador, o histórico é apagado; por isso, exporte um backup de vez em quando na página de progresso.
 
 > Alguns navegadores restringem o armazenamento local quando o arquivo é aberto diretamente como `file://`. Se isso acontecer, execute um servidor local simples na pasta do projeto:
 >
@@ -40,6 +41,7 @@ O progresso fica salvo no `localStorage` do próprio navegador, na chave `pss1-c
 │   │   └── estilo.css
 │   └── js/
 │       ├── app.js
+│       ├── tema.js
 │       └── dados/
 │           ├── arte.js
 │           ├── biologia.js

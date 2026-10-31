@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-tema="claro">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Caderno de estudos para o PSS 1 2026 do CPS: resumos, flashcards, quizzes e simulado de Arte, Educação Física, Português, Inglês, Espanhol, Biologia, Química, Matemática e Geografia.">
   <meta name="theme-color" content="#f6f5f1">
+  <script src="assets/js/tema.js"></script>
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <title>Caderno PSS 1 2026</title>
   <link rel="stylesheet" href="assets/css/estilo.css">
@@ -51,6 +52,12 @@
       </nav>
 
       <div class="rodape-lateral">
+        <button class="tema-toggle tema-toggle-lateral" type="button" data-tema-toggle aria-label="Ativar tema escuro" aria-pressed="false" title="Ativar tema escuro">
+          <span class="tema-toggle-icone" data-tema-icone aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 019.5 4 8 8 0 1020 14.5z"/></svg>
+          </span>
+          <span data-tema-texto>Tema escuro</span>
+        </button>
         <p>Material de apoio para o Processo Seletivo Seriado.</p>
         <p class="rodape-lateral-min">Estude pelo edital oficial.</p>
       </div>
@@ -63,6 +70,11 @@
         </button>
         <a class="topo-marca" href="#/">PSS 1 <span>2026</span></a>
         <div class="topo-acoes">
+          <button class="tema-toggle tema-toggle-topo" type="button" data-tema-toggle aria-label="Ativar tema escuro" aria-pressed="false" title="Ativar tema escuro">
+            <span class="tema-toggle-icone" data-tema-icone aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 019.5 4 8 8 0 1020 14.5z"/></svg>
+            </span>
+          </button>
           <a class="topo-link" href="#/progresso">Progresso</a>
         </div>
       </header>

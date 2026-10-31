@@ -17,6 +17,7 @@
   var timerSimulado = null;
   var timerAviso = null;
   var timerNotas = null;
+  var ouvinteTecladoFlash = null;
 
   var main = document.getElementById("conteudo");
   var navMaterias = document.getElementById("nav-materias");
@@ -219,6 +220,13 @@
     }
   }
 
+  function limparTecladoFlash() {
+    if (ouvinteTecladoFlash) {
+      document.removeEventListener("keydown", ouvinteTecladoFlash);
+      ouvinteTecladoFlash = null;
+    }
+  }
+
   function formatarTempo(segundos) {
     var s = Math.max(0, Math.round(segundos));
     var h = Math.floor(s / 3600);
@@ -290,6 +298,7 @@
 
   function rotear() {
     limparTimers();
+    limparTecladoFlash();
     clearTimeout(timerNotas);
     fecharMenu();
 
@@ -640,7 +649,9 @@
       return;
     }
 
-    if (!estado.flashcards[m.id]) estado.flashcards[m.id] = { conhecidos: [] };
+    if (!estado.flashcards[m.id] || !Array.isArray(estado.flashcards[m.id].conhecidos)) {
+      estado.flashcards[m.id] = { conhecidos: [] };
+    }
     var conhecidos = new Set(estado.flashcards[m.id].conhecidos.filter(function (n) {
       return typeof n === "number" && n >= 0 && n < cartoes.length;
     }));
@@ -770,16 +781,19 @@
       }
     });
 
-    document.addEventListener("keydown", function aoTeclar(evento) {
-      if (!document.getElementById("flash-cartao")) {
-        document.removeEventListener("keydown", aoTeclar);
-        return;
-      }
-      if (evento.code === "Space" && document.activeElement === document.body) {
-        evento.preventDefault();
-        virar();
-      }
-    });
+    limparTecladoFlash();
+    ouvinteTecladoFlash = function (evento) {
+      if (!document.getElementById("flash-cartao")) return;
+      if (evento.code !== "Space" && evento.key !== " ") return;
+      if (evento.repeat || document.body.classList.contains("menu-aberto")) return;
+
+      var alvo = evento.target;
+      if (alvo && alvo.closest && alvo.closest("button, a, input, textarea, select, [contenteditable='true']")) return;
+
+      evento.preventDefault();
+      virar();
+    };
+    document.addEventListener("keydown", ouvinteTecladoFlash);
 
     render();
   }
