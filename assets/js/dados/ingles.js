@@ -680,6 +680,20 @@ window.PSS_DADOS.ingles = {
       correta: 3,
       explicacao: "Must expressa obrigação forte, pois o passaporte é exigido; must not expressa proibição, adequada a não esquecer o documento. Do not have to significa não precisar, diferente de must not; should é conselho, might é possibilidade e can é habilidade ou permissão. A alternativa 3 é a correta.",
       topicoId: "ingles-4-2-10"
+    },
+    {
+      id: "ingles-q15",
+      enunciado: "Read the excerpt: “The city council introduced a bike-sharing program to reduce traffic. Although the number of users increased during the first months, the project still faces challenges: some stations are empty at rush hour, while others have more bicycles than they can accommodate.” Qual é a principal ideia do trecho?",
+      alternativas: [
+        "O programa foi encerrado porque ninguém utilizava as bicicletas.",
+        "O aumento de usuários resolveu todos os problemas de distribuição.",
+        "O projeto apresenta crescimento, mas ainda precisa equilibrar a oferta de bicicletas entre as estações.",
+        "A prefeitura pretende substituir todos os ônibus por bicicletas.",
+        "As estações têm sempre a mesma quantidade de bicicletas ao longo do dia."
+      ],
+      correta: 2,
+      explicacao: "O texto informa que o número de usuários cresceu, mas há um desequilíbrio: algumas estações ficam sem bicicletas e outras acumulam unidades. A alternativa 2 sintetiza o avanço e o desafio ainda existente. Although introduz uma ideia concessiva, equivalente a 'embora'.",
+      topicoId: "ingles-4-1-1"
     }
   ]
 };
