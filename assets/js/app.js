@@ -5,6 +5,8 @@
   "use strict";
 
   var DADOS = window.PSS_DADOS || {};
+  var DESAFIOS = window.PSS_DESAFIOS || {};
+  var REDACAO = window.PSS_REDACAO || null;
   var CHAVE = "pss1-caderno-v1";
   var LETRAS = ["A", "B", "C", "D", "E"];
 
@@ -13,8 +15,16 @@
     .filter(function (m) { return m && m.id && Array.isArray(m.topicos); })
     .sort(function (a, b) { return (a.ordem || 99) - (b.ordem || 99); });
 
+  MATERIAS.forEach(function (m) {
+    if (Array.isArray(DESAFIOS[m.id]) && DESAFIOS[m.id].length) {
+      m.questoes = (m.questoes || []).concat(DESAFIOS[m.id]);
+    }
+  });
+
   var estado = carregarEstado();
   var timerSimulado = null;
+  var timerRedacao = null;
+  var redacaoAtivaId = null;
   var timerAviso = null;
   var timerNotas = null;
   var ouvinteTecladoFlash = null;
@@ -58,6 +68,7 @@
       anotacoes: {},
       quizzes: {},
       flashcards: {},
+      redacoes: {},
       dias: [],
       ultimoTopico: null,
       simulados: []
@@ -76,6 +87,7 @@
         anotacoes: dados.anotacoes && typeof dados.anotacoes === "object" ? dados.anotacoes : base.anotacoes,
         quizzes: dados.quizzes && typeof dados.quizzes === "object" ? dados.quizzes : base.quizzes,
         flashcards: dados.flashcards && typeof dados.flashcards === "object" ? dados.flashcards : base.flashcards,
+        redacoes: dados.redacoes && typeof dados.redacoes === "object" ? dados.redacoes : base.redacoes,
         dias: Array.isArray(dados.dias) ? dados.dias : base.dias,
         ultimoTopico: dados.ultimoTopico && typeof dados.ultimoTopico === "object" ? dados.ultimoTopico : base.ultimoTopico,
         simulados: Array.isArray(dados.simulados) ? dados.simulados : base.simulados
@@ -186,6 +198,38 @@
     return Math.round(notas.reduce(function (a, b) { return a + b; }, 0) / notas.length);
   }
 
+  function contarPalavras(texto) {
+    var t = String(texto || "").trim();
+    if (!t) return 0;
+    return t.split(/\s+/).filter(Boolean).length;
+  }
+
+  function propostasRedacao() {
+    return REDACAO && Array.isArray(REDACAO.propostas) ? REDACAO.propostas : [];
+  }
+
+  function acharPropostaRedacao(id) {
+    return propostasRedacao().find(function (p) { return p.id === id; }) || null;
+  }
+
+  function progressoRedacao() {
+    var propostas = propostasRedacao();
+    var concluidas = 0;
+    var comRascunho = 0;
+    propostas.forEach(function (p) {
+      var entrada = estado.redacoes[p.id];
+      if (!entrada) return;
+      if (entrada.concluida) concluidas++;
+      if (contarPalavras(entrada.texto)) comRascunho++;
+    });
+    return {
+      total: propostas.length,
+      concluidas: concluidas,
+      comRascunho: comRascunho,
+      porcento: pct(concluidas, propostas.length)
+    };
+  }
+
   function calcularSequencia() {
     var dias = new Set(estado.dias);
     var cursor = new Date();
@@ -218,6 +262,15 @@
       clearInterval(timerSimulado);
       timerSimulado = null;
     }
+    if (timerRedacao) {
+      clearInterval(timerRedacao);
+      timerRedacao = null;
+      if (redacaoAtivaId && estado.redacoes[redacaoAtivaId]) {
+        estado.redacoes[redacaoAtivaId].rodando = false;
+        salvar();
+      }
+    }
+    redacaoAtivaId = null;
   }
 
   function limparTecladoFlash() {
@@ -318,6 +371,12 @@
         viewQuiz(partes[1]);
       } else if (partes[0] === "simulado") {
         viewSimulado();
+      } else if (partes[0] === "redacao") {
+        if (partes[1]) {
+          viewRedacaoProposta(partes[1]);
+        } else {
+          viewRedacao();
+        }
       } else if (partes[0] === "progresso") {
         viewProgresso();
       } else {
@@ -405,7 +464,7 @@
         '<div>' +
           '<p class="olho">CPS · Processo Seletivo Seriado · 2026</p>' +
           '<h1 class="titulo-pagina">Um caderno para <em>estudar de verdade</em>.</h1>' +
-          '<p class="hero-subtitulo">Todo o conteúdo do PSS 1 em resumos diretos, flashcards, quizzes e simulado. Sem distração, sem cadastro: seu progresso fica salvo neste navegador.</p>' +
+          '<p class="hero-subtitulo">Todo o conteúdo do PSS 1 em resumos diretos, flashcards, quizzes desafiadores, simulado e treino de redação. Sem distração, sem cadastro: seu progresso fica salvo neste navegador.</p>' +
         "</div>" +
         '<div class="hero-progresso">' +
           '<span class="hero-numero">' + geral.porcento + "<small>%</small></span>" +
@@ -421,7 +480,8 @@
       '<section class="secao">' +
         '<div class="secao-cabecalho"><h2 class="titulo-secao">Para praticar</h2></div>' +
         '<div class="atalhos">' +
-          '<a class="atalho" href="#/simulado"><span class="atalho-icone">' + ICONES.relogio + "</span><span><strong>Simulado geral</strong><span>Questões de todas as matérias com cronômetro.</span></span></a>" +
+          '<a class="atalho" href="#/simulado"><span class="atalho-icone">' + ICONES.relogio + "</span><span><strong>Simulado desafiador</strong><span>Questões de nível PSS 1 com cronômetro.</span></span></a>" +
+          '<a class="atalho" href="#/redacao"><span class="atalho-icone">' + ICONES.anotacao + "</span><span><strong>Treino de redação</strong><span>Comentário de internet e narração escolar.</span></span></a>" +
           '<a class="atalho" href="#/progresso"><span class="atalho-icone">' + ICONES.alvo + "</span><span><strong>Meu progresso</strong><span>Tópicos, quizzes e flashcards em um só lugar.</span></span></a>" +
           (MATERIAS[0] ? '<a class="atalho" href="#/flashcards/' + encodeURIComponent(MATERIAS[0].id) + '"><span class="atalho-icone">' + ICONES.cartoes + "</span><span><strong>Flashcards</strong><span>Revise os conceitos-chave de cada matéria.</span></span></a>" : "") +
         "</div>" +
@@ -820,12 +880,14 @@
     main.innerHTML =
       '<header class="cabecalho-ferramenta">' +
         '<nav class="migalhas" aria-label="Você está em"><a href="#/">Início</a><span aria-hidden="true">/</span><a href="#/materia/' + encodeURIComponent(m.id) + '">' + esc(m.nome) + '</a><span aria-hidden="true">/</span><span>Quiz</span></nav>' +
-        '<div><p class="olho">Teste seus conhecimentos</p><h1 class="titulo-pagina">Quiz de ' + esc(m.nome) + '</h1><p class="ferramenta-info">' + questoes.length + " questões · correção com explicação</p></div>" +
+        '<div><p class="olho">Teste seus conhecimentos</p><h1 class="titulo-pagina">Quiz de ' + esc(m.nome) + '</h1><p class="ferramenta-info">' + questoes.length + " questões · " + desafio.length + " no desafio · correção com explicação</p></div>" +
         '<a class="botao" href="#/materia/' + encodeURIComponent(m.id) + '">' + ICONES.setaEsquerda + " Voltar</a>" +
       "</header>" +
       '<div class="quiz-area" id="quiz-area"></div>';
 
     var area = document.getElementById("quiz-area");
+    var desafio = questoes.filter(function (q) { return q.nivel === "desafio"; });
+    var modoAtual = desafio.length ? "desafio" : "revisao";
     var perguntas = [];
     var atual = 0;
     var selecionada = null;
@@ -836,13 +898,20 @@
 
     function renderIntro() {
       var melhor = registro && typeof registro.melhor === "number" ? registro.melhor : null;
+      var totalDesafio = desafio.length;
+      var totalRevisao = questoes.length;
+      var btnDesafio = totalDesafio
+        ? '<button class="botao principal" type="button" data-quiz="comecar" data-modo="desafio">' + ICONES.brilho + " Desafio PSS 1 · " + totalDesafio + " questões</button>"
+        : "";
+      var btnRevisao = '<button class="botao ' + (totalDesafio ? "" : "principal") + '" type="button" data-quiz="comecar" data-modo="revisao">' + ICONES.quiz + " Revisão completa · " + totalRevisao + " questões</button>";
       area.innerHTML =
-        '<div class="cartao" style="text-align:center;padding:40px 28px">' +
+        '<div class="cartao quiz-intro">' +
           '<p class="olho">' + esc(m.nome) + "</p>" +
-          '<h2 class="titulo-secao" style="font-size:30px">' + questoes.length + " questões para praticar</h2>" +
-          '<p class="subtitulo" style="margin:0 auto 18px">As alternativas são corrigidas na hora, com explicação e link para o tópico. O resultado fica salvo no seu progresso.</p>' +
-          (melhor !== null ? '<p style="margin-bottom:20px"><span class="pilula ' + (melhor >= 60 ? "verde" : "aviso") + '">Melhor resultado: ' + melhor + "%</span></p>" : "") +
-          '<button class="botao principal" type="button" data-quiz="comecar">Começar quiz ' + ICONES.setaDireita + "</button>" +
+          '<h2 class="titulo-secao">Escolha o nível do seu treino</h2>' +
+          '<p class="subtitulo">O <strong>Desafio PSS 1</strong> traz questões com distratores mais sutis, interpretação de dados e problemas de várias etapas. A revisão completa inclui todo o banco, para consolidar a base.</p>' +
+          (melhor !== null ? '<p style="margin-bottom:18px"><span class="pilula ' + (melhor >= 60 ? "verde" : "aviso") + '">Melhor resultado: ' + melhor + "%</span></p>" : "") +
+          '<div class="quiz-modos">' + btnDesafio + btnRevisao + "</div>" +
+          '<p class="quiz-intro-nota">Correção imediata com explicação e link para o tópico. O resultado fica salvo no seu progresso.</p>' +
         "</div>";
     }
 
@@ -870,8 +939,9 @@
         "</div>";
       }
 
+      var seloNivel = q.nivel === "desafio" ? '<span class="pilula desafio">Desafio</span> ' : "";
       area.innerHTML =
-        '<div class="quiz-topo"><span>Questão <strong>' + (atual + 1) + "</strong> de " + perguntas.length + '</span><span>' + esc(m.nome) + "</span></div>" +
+        '<div class="quiz-topo"><span>Questão <strong>' + (atual + 1) + "</strong> de " + perguntas.length + '</span><span>' + seloNivel + esc(m.nome) + "</span></div>" +
         '<div class="barra-progresso" aria-hidden="true"><span style="width:' + pct(atual, perguntas.length) + '%"></span></div>' +
         '<div class="quiz-cartao" style="margin-top:14px">' +
           '<p class="quiz-enunciado">' + esc(q.enunciado) + "</p>" +
@@ -923,7 +993,7 @@
           "<p>" + acertos + " de " + total + " respostas corretas em " + esc(m.nome) + "</p>" +
           '<div class="barra-progresso" style="max-width:340px;margin:0 auto 20px" aria-hidden="true"><span style="width:' + porcento + '%"></span></div>' +
           '<div class="lista-acoes" style="justify-content:center">' +
-            '<button class="botao principal" type="button" data-quiz="refazer">Refazer quiz</button>' +
+            '<button class="botao principal" type="button" data-quiz="refazer">' + (modoAtual === "desafio" ? "Refazer desafio" : "Refazer revisão") + '</button>' +
             '<a class="botao" href="#/flashcards/' + encodeURIComponent(m.id) + '">' + ICONES.cartoes + " Flashcards</a>" +
             '<a class="botao secundario" href="#/materia/' + encodeURIComponent(m.id) + '">Voltar para a matéria</a>' +
           "</div>" +
@@ -944,7 +1014,11 @@
 
       var acao = alvo.getAttribute("data-quiz");
       if (acao === "comecar" || acao === "refazer") {
-        perguntas = embaralhar(questoes.slice());
+        if (acao === "comecar") {
+          modoAtual = alvo.getAttribute("data-modo") === "revisao" ? "revisao" : "desafio";
+        }
+        var pool = modoAtual === "desafio" && desafio.length ? desafio : questoes;
+        perguntas = embaralhar(pool.slice());
         atual = 0;
         selecionada = null;
         confirmada = false;
@@ -985,11 +1059,20 @@
     }, 0);
   }
 
-  function montarSimulado(quantidade) {
+  function questoesDesafioDisponiveis() {
+    return MATERIAS.reduce(function (total, m) {
+      return total + (m.questoes || []).filter(function (q) { return q.nivel === "desafio"; }).length;
+    }, 0);
+  }
+
+  function montarSimulado(quantidade, somenteDesafio) {
     var pools = MATERIAS
       .filter(function (m) { return (m.questoes || []).length; })
       .map(function (m) {
-        return embaralhar(m.questoes.map(function (q) {
+        var questoes = (m.questoes || []).filter(function (q) {
+          return !somenteDesafio || q.nivel === "desafio";
+        });
+        return embaralhar(questoes.map(function (q) {
           return { materia: m, questao: q };
         }));
       })
@@ -1011,23 +1094,32 @@
     atualizarTitulo("Simulado");
 
     var total = questoesDisponiveis();
+    var totalDesafio = questoesDesafioDisponiveis();
     var historico = estado.simulados || [];
+    var totalModo = totalDesafio || total;
 
     if (!total) {
       main.innerHTML = '<div class="vazio"><h2>Simulado em preparação</h2><p>As questões ainda não foram carregadas.</p><a class="botao" href="#/">Voltar ao início</a></div>';
       return;
     }
 
-    var opcoesQtd = [20, 40, total].filter(function (n, i, arr) {
-      return n <= total && arr.indexOf(n) === i;
+    var opcoesQtd = [20, 40, totalModo].filter(function (n, i, arr) {
+      return n <= totalModo && arr.indexOf(n) === i;
     });
 
     main.innerHTML =
       '<header class="cabecalho-ferramenta">' +
         '<nav class="migalhas" aria-label="Você está em"><a href="#/">Início</a><span aria-hidden="true">/</span><span>Simulado</span></nav>' +
-        '<div><p class="olho">Prática geral</p><h1 class="titulo-pagina">Simulado PSS 1</h1><p class="ferramenta-info">Questões de todas as matérias, com cronômetro e resultado por área.</p></div>' +
+        '<div><p class="olho">Prática em nível PSS</p><h1 class="titulo-pagina">Simulado PSS 1</h1><p class="ferramenta-info">Questões de todas as matérias, com cronômetro e resultado por área.</p></div>' +
       "</header>" +
       '<form class="config-simulado" id="form-simulado">' +
+        '<fieldset class="campo-grupo" style="border:0;padding:0">' +
+          "<legend>Nível</legend>" +
+          '<div class="opcoes-radio">' +
+            '<label class="opcao-radio"><input type="radio" name="nivel" value="desafio"' + (totalDesafio ? " checked" : " disabled") + '><span>Desafio PSS 1 · ' + (totalDesafio || "em breve") + '</span></label>' +
+            '<label class="opcao-radio"><input type="radio" name="nivel" value="revisao"' + (totalDesafio ? "" : " checked") + '><span>Revisão geral · ' + total + '</span></label>' +
+          "</div>" +
+        "</fieldset>" +
         '<fieldset class="campo-grupo" style="border:0;padding:0">' +
           "<legend>Quantidade de questões</legend>" +
           '<div class="opcoes-radio">' +
@@ -1056,15 +1148,18 @@
       form.addEventListener("submit", function (evento) {
         evento.preventDefault();
         var dadosForm = new FormData(form);
-        var quantidade = Number(dadosForm.get("quantidade")) || Math.min(20, total);
+        var nivel = dadosForm.get("nivel") === "desafio" && totalDesafio ? "desafio" : "revisao";
+        var limiteModo = nivel === "desafio" ? totalDesafio : total;
+        var quantidade = Number(dadosForm.get("quantidade")) || Math.min(20, limiteModo);
         var segundos = Number(dadosForm.get("tempo")) || 0;
-        var itens = montarSimulado(Math.min(quantidade, total));
-        iniciarSimulado(itens, segundos);
+        var itens = montarSimulado(Math.min(quantidade, limiteModo), nivel === "desafio");
+        if (itens.length) iniciarSimulado(itens, segundos, nivel);
       });
     }
   }
 
-  function iniciarSimulado(itens, segundosPorQuestao) {
+  function iniciarSimulado(itens, segundosPorQuestao, nivel) {
+    nivel = nivel || "revisao";
     var respostas = new Array(itens.length).fill(null);
     var atual = 0;
     var inicio = Date.now();
@@ -1074,7 +1169,7 @@
     main.innerHTML =
       '<header class="cabecalho-ferramenta">' +
         '<nav class="migalhas" aria-label="Você está em"><a href="#/">Início</a><span aria-hidden="true">/</span><span>Simulado</span></nav>' +
-        '<div><p class="olho">Simulado em andamento</p><h1 class="titulo-pagina">Simulado PSS 1</h1><p class="ferramenta-info">' + itens.length + " questões · " + (limite ? "tempo total de " + formatarTempo(limite / 1000) : "sem limite de tempo") + "</p></div>" +
+        '<div><p class="olho">Simulado em andamento</p><h1 class="titulo-pagina">Simulado PSS 1</h1><p class="ferramenta-info">' + (nivel === "desafio" ? '<span class="pilula desafio">Desafio</span> · ' : "") + itens.length + " questões · " + (limite ? "tempo total de " + formatarTempo(limite / 1000) : "sem limite de tempo") + "</p></div>" +
         '<span class="cronometro" id="cronometro-simulado">' + ICONES.relogio + " <span>00:00</span></span>" +
       "</header>" +
       '<div class="quiz-area" id="simulado-area"></div>';
@@ -1094,7 +1189,7 @@
       }).join("");
 
       area.innerHTML =
-        '<div class="quiz-topo"><span>Questão <strong>' + (atual + 1) + "</strong> de " + itens.length + "</span><span>" + esc(item.materia.nome) + " · " + respondidas + " respondidas</span></div>" +
+        '<div class="quiz-topo"><span>Questão <strong>' + (atual + 1) + "</strong> de " + itens.length + "</span><span>" + (q.nivel === "desafio" ? '<span class="pilula desafio">Desafio</span> ' : "") + esc(item.materia.nome) + " · " + respondidas + " respondidas</span></div>" +
         '<div class="barra-progresso" aria-hidden="true"><span style="width:' + pct(atual, itens.length) + '%"></span></div>' +
         '<div class="quiz-cartao" style="margin-top:14px">' +
           '<p class="quiz-enunciado">' + esc(q.enunciado) + "</p>" +
@@ -1163,6 +1258,7 @@
         total: itens.length,
         porcento: porcento,
         tempo: tempoGastoSeg,
+        nivel: nivel,
         porMateria: porMateria
       });
       estado.simulados = estado.simulados.slice(0, 8);
@@ -1254,6 +1350,355 @@
 
   /* ---------- Progresso ---------- */
 
+  /* ---------- Redação ---------- */
+
+  function rotuloRedacao(proposta) {
+    var entrada = estado.redacoes[proposta.id];
+    if (!entrada) return { texto: "Não iniciada", classe: "" };
+    if (entrada.concluida) return { texto: "Concluída", classe: "verde" };
+    var palavras = contarPalavras(entrada.texto);
+    if (palavras) return { texto: "Rascunho · " + palavras + " palavras", classe: "aviso" };
+    return { texto: "Não iniciada", classe: "" };
+  }
+
+  function viewRedacao() {
+    marcarNav("redacao");
+    atualizarTitulo("Treino de redação");
+
+    var propostas = propostasRedacao();
+    if (!propostas.length) {
+      main.innerHTML = '<div class="vazio"><h2>Redação em preparação</h2><p>As propostas ainda não foram carregadas.</p><a class="botao" href="#/">Voltar ao início</a></div>';
+      return;
+    }
+
+    var progresso = progressoRedacao();
+    var cards = propostas.map(function (p) {
+      var rotulo = rotuloRedacao(p);
+      return '<a class="redacao-card" href="#/redacao/' + encodeURIComponent(p.id) + '">' +
+        '<div class="redacao-card-topo">' +
+          '<span class="pilula">' + esc(p.categoria || p.genero) + "</span>" +
+          '<span class="redacao-card-status ' + rotulo.classe + '">' + esc(rotulo.texto) + "</span>" +
+        "</div>" +
+        "<h3>" + esc(p.titulo) + "</h3>" +
+        '<p class="redacao-card-tema">' + esc(p.tema) + "</p>" +
+        '<p class="redacao-card-obra">' + esc(p.obra) + "</p>" +
+        '<div class="redacao-card-meta">' +
+          "<span>" + p.minPalavras + "–" + p.maxPalavras + " palavras</span>" +
+          "<span>" + p.minutos + " min</span>" +
+        "</div>" +
+      "</a>";
+    }).join("");
+
+    var orientacoes = (REDACAO.orientacoesGerais || []).map(function (item) {
+      return "<li>" + esc(item) + "</li>";
+    }).join("");
+
+    main.innerHTML =
+      '<header class="cabecalho-ferramenta">' +
+        '<nav class="migalhas" aria-label="Você está em"><a href="#/">Início</a><span aria-hidden="true">/</span><span>Redação</span></nav>' +
+        '<div><p class="olho">Escrever também se treina</p><h1 class="titulo-pagina">Treino de redação</h1><p class="ferramenta-info">' + propostas.length + " propostas · comentário de internet e narração escolar</p></div>" +
+      "</header>" +
+      '<section class="redacao-intro">' +
+        '<div class="redacao-intro-texto">' +
+          "<h2 class=\"titulo-secao\">Do comentário à narrativa</h2>" +
+          "<p class=\"subtitulo\">" + esc(REDACAO.descricao || "") + "</p>" +
+          '<p class="redacao-aviso">' + ICONES.alerta + " <span>" + esc(REDACAO.aviso || "") + "</span></p>" +
+        "</div>" +
+        '<div class="redacao-progresso-caixa">' +
+          '<span class="redacao-progresso-numero">' + progresso.concluidas + "<small>/" + progresso.total + "</small></span>" +
+          '<p>propostas concluídas</p>' +
+          '<div class="barra-progresso" aria-hidden="true"><span style="width:' + progresso.porcento + '%"></span></div>' +
+          '<p class="redacao-progresso-detalhe">' + progresso.comRascunho + " com rascunho salvo</p>" +
+        "</div>" +
+      "</section>" +
+      '<section class="secao">' +
+        '<div class="secao-cabecalho"><h2 class="titulo-secao">Escolha uma proposta</h2><span class="redacao-mini-info">Rascunho e cronômetro salvos neste navegador</span></div>' +
+        '<div class="redacao-grade">' + cards + "</div>" +
+      "</section>" +
+      '<section class="secao redacao-como-funciona">' +
+        '<div class="secao-cabecalho"><h2 class="titulo-secao">Como usar o treino</h2></div>' +
+        '<ol class="redacao-orientacoes">' + orientacoes + "</ol>" +
+      "</section>" +
+      '<p class="nota-rodape">As propostas são materiais autorais de apoio. Confira sempre o edital e as orientações oficiais da CPS sobre gêneros, limites e critérios de correção.</p>';
+  }
+
+  function viewRedacaoProposta(id) {
+    var proposta = acharPropostaRedacao(id);
+    if (!proposta) return viewNaoEncontrado();
+
+    marcarNav("redacao");
+    atualizarTitulo(proposta.titulo);
+
+    var entrada = estado.redacoes[id];
+    if (!entrada || typeof entrada !== "object") {
+      entrada = { texto: "", checklist: {}, concluida: false, tempoSegundos: 0, atualizadoEm: null };
+      estado.redacoes[id] = entrada;
+    }
+    if (typeof entrada.texto !== "string") entrada.texto = "";
+    if (!entrada.checklist || typeof entrada.checklist !== "object") entrada.checklist = {};
+    if (typeof entrada.tempoSegundos !== "number") entrada.tempoSegundos = 0;
+    entrada.rodando = false;
+    redacaoAtivaId = id;
+
+    var palavrasIniciais = contarPalavras(entrada.texto);
+    var checklist = Array.isArray(proposta.checklist) ? proposta.checklist : [];
+    var marcados = checklist.filter(function (_, i) { return !!entrada.checklist[i]; }).length;
+    var salvoTexto = entrada.atualizadoEm
+      ? "Salvo às " + new Date(entrada.atualizadoEm).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })
+      : "Salvo automaticamente neste navegador";
+
+    var roteiro = (proposta.roteiro || []).map(function (item) {
+      return "<li>" + esc(item) + "</li>";
+    }).join("");
+    var repertorio = (proposta.repertorio || []).map(function (item) {
+      return "<li>" + esc(item) + "</li>";
+    }).join("");
+    var checklistHtml = checklist.map(function (item, i) {
+      return '<label class="redacao-check">' +
+        '<input type="checkbox" data-check="' + i + '"' + (entrada.checklist[i] ? " checked" : "") + ">" +
+        "<span>" + esc(item) + "</span>" +
+      "</label>";
+    }).join("");
+
+    var citacao = "";
+    if (proposta.post) {
+      citacao = '<figure class="redacao-citacao"><figcaption>Postagem</figcaption><blockquote>' + esc(proposta.post) + "</blockquote></figure>";
+    } else if (proposta.excerpt) {
+      citacao = '<figure class="redacao-citacao"><figcaption>Trecho inicial</figcaption><blockquote>' + esc(proposta.excerpt) + "</blockquote></figure>";
+    }
+
+    main.innerHTML =
+      '<header class="cabecalho-ferramenta redacao-cabecalho">' +
+        '<nav class="migalhas" aria-label="Você está em"><a href="#/">Início</a><span aria-hidden="true">/</span><a href="#/redacao">Redação</a><span aria-hidden="true">/</span><span>' + esc(proposta.titulo) + "</span></nav>" +
+        '<div class="redacao-titulo-linha">' +
+          "<div>" +
+            '<p class="olho">' + esc(proposta.genero) + "</p>" +
+            '<h1 class="titulo-pagina">' + esc(proposta.titulo) + "</h1>" +
+            '<p class="ferramenta-info">' + esc(proposta.obra) + " · " + esc(proposta.tema) + "</p>" +
+          "</div>" +
+          '<div class="redacao-ficha">' +
+            "<span><strong>" + proposta.minPalavras + "–" + proposta.maxPalavras + "</strong> palavras</span>" +
+            "<span><strong>" + proposta.minutos + "</strong> min sugeridos</span>" +
+            "<span><strong>" + marcados + "/" + checklist.length + "</strong> checklist</span>" +
+          "</div>" +
+        "</div>" +
+      "</header>" +
+      '<div class="redacao-layout">' +
+        '<div class="redacao-principal">' +
+          '<section class="redacao-briefing">' +
+            '<p class="redacao-contexto">' + esc(proposta.contexto) + "</p>" +
+            citacao +
+            '<div class="redacao-comando"><span class="redacao-rotulo">Comando</span><p>' + esc(proposta.comando) + "</p></div>" +
+          "</section>" +
+          '<section class="redacao-editor-caixa">' +
+            '<div class="redacao-editor-topo">' +
+              "<div>" +
+                '<h2 class="redacao-editor-titulo">Seu texto</h2>' +
+                '<p class="redacao-editor-sub">O rascunho é salvo enquanto você escreve.</p>' +
+              "</div>" +
+              '<span class="cronometro" id="cronometro-redacao">' + ICONES.relogio + " <span>00:00</span></span>" +
+            "</div>" +
+            '<label class="redacao-rotulo" for="redacao-texto">Rascunho</label>' +
+            '<textarea id="redacao-texto" class="redacao-textarea" spellcheck="true" placeholder="Comece a escrever aqui. Planeje antes de redigir e não se esqueça de revisar.">' + esc(entrada.texto) + "</textarea>" +
+            '<div class="redacao-editor-rodape">' +
+              '<div class="redacao-contador"><strong id="redacao-palavras">' + palavrasIniciais + "</strong> palavras <span id=\"redacao-faixa\"></span></div>" +
+              '<span class="redacao-salvo" id="redacao-salvo">' + esc(salvoTexto) + "</span>" +
+            "</div>" +
+            '<div class="redacao-editor-acoes">' +
+              '<button class="botao pequeno" type="button" data-redacao="timer">' + ICONES.relogio + " Iniciar</button>" +
+              '<button class="botao pequeno principal" type="button" data-redacao="concluir">' + ICONES.check + " Marcar como concluída</button>" +
+              '<button class="botao pequeno" type="button" data-redacao="baixar">' + ICONES.download + " Baixar .txt</button>" +
+              '<button class="botao pequeno perigo" type="button" data-redacao="apagar">' + ICONES.lixo + " Apagar rascunho</button>" +
+            "</div>" +
+          "</section>" +
+        "</div>" +
+        '<aside class="redacao-lateral">' +
+          '<section class="redacao-apoio">' +
+            '<h2 class="redacao-apoio-titulo">Roteiro</h2>' +
+            '<ol class="redacao-roteiro">' + roteiro + "</ol>" +
+          "</section>" +
+          (repertorio ? '<section class="redacao-apoio"><h2 class="redacao-apoio-titulo">Repertório</h2><ul class="redacao-repertorio">' + repertorio + "</ul></section>" : "") +
+          '<section class="redacao-apoio">' +
+            '<div class="redacao-apoio-topo"><h2 class="redacao-apoio-titulo">Autoavaliação</h2><span class="redacao-checklist-num" id="redacao-checklist-num">' + marcados + "/" + checklist.length + "</span></div>" +
+            '<div class="redacao-checklist">' + checklistHtml + "</div>" +
+          "</section>" +
+          (proposta.dica ? '<p class="redacao-dica">' + ICONES.brilho + " <span>" + esc(proposta.dica) + "</span></p>" : "") +
+          '<a class="botao secundario redacao-voltar" href="#/redacao">' + ICONES.voltar + " Voltar às propostas</a>" +
+        "</aside>" +
+      "</div>" +
+      '<p class="nota-rodape">Tempo e rascunho ficam no armazenamento local deste navegador. Exporte seu progresso na página <a href="#/progresso">Meu progresso</a> se quiser guardar uma cópia.</p>';
+
+    var textarea = document.getElementById("redacao-texto");
+    var palavrasEl = document.getElementById("redacao-palavras");
+    var faixaEl = document.getElementById("redacao-faixa");
+    var salvoEl = document.getElementById("redacao-salvo");
+    var timerEl = document.getElementById("cronometro-redacao");
+    var botaoTimer = main.querySelector('[data-redacao="timer"]');
+    var botaoConcluir = main.querySelector('[data-redacao="concluir"]');
+    var checklistNum = document.getElementById("redacao-checklist-num");
+    var timeoutSalvar = null;
+
+    function horarioAgora() {
+      return new Date().toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
+    }
+
+    function atualizarFaixa() {
+      var n = contarPalavras(textarea.value);
+      palavrasEl.textContent = n;
+      if (!n) {
+        faixaEl.textContent = "· meta: " + proposta.minPalavras + "–" + proposta.maxPalavras;
+        faixaEl.className = "";
+      } else if (n < proposta.minPalavras) {
+        faixaEl.textContent = "· faltam " + (proposta.minPalavras - n) + " para o mínimo";
+        faixaEl.className = "aviso";
+      } else if (n > proposta.maxPalavras) {
+        faixaEl.textContent = "· " + (n - proposta.maxPalavras) + " acima do limite";
+        faixaEl.className = "aviso";
+      } else {
+        faixaEl.textContent = "· dentro do limite";
+        faixaEl.className = "ok";
+      }
+    }
+
+    function atualizarTimer() {
+      if (!timerEl) return;
+      var inner = timerEl.querySelector("span");
+      if (inner) inner.textContent = formatarTempo(entrada.tempoSegundos || 0);
+      timerEl.classList.toggle("urgente", (entrada.tempoSegundos || 0) > proposta.minutos * 60);
+      if (botaoTimer) {
+        botaoTimer.innerHTML = ICONES.relogio + " " + (entrada.rodando ? "Pausar" : (entrada.tempoSegundos ? "Retomar" : "Iniciar"));
+      }
+    }
+
+    function atualizarConcluir() {
+      if (!botaoConcluir) return;
+      botaoConcluir.innerHTML = entrada.concluida
+        ? ICONES.checkCirculo + " Concluída — reabrir"
+        : ICONES.check + " Marcar como concluída";
+      botaoConcluir.classList.toggle("principal", !entrada.concluida);
+      botaoConcluir.classList.toggle("secundario", !!entrada.concluida);
+    }
+
+    function atualizarChecklist() {
+      var total = 0;
+      checklist.forEach(function (_, i) { if (entrada.checklist[i]) total++; });
+      if (checklistNum) checklistNum.textContent = total + "/" + checklist.length;
+    }
+
+    function salvarAgora() {
+      clearTimeout(timeoutSalvar);
+      salvar();
+      if (salvoEl) salvoEl.textContent = "Salvo às " + horarioAgora();
+    }
+
+    textarea.addEventListener("input", function () {
+      entrada.texto = textarea.value;
+      entrada.atualizadoEm = new Date().toISOString();
+      atualizarFaixa();
+      if (salvoEl) salvoEl.textContent = "Salvando…";
+      clearTimeout(timeoutSalvar);
+      timeoutSalvar = setTimeout(function () {
+        salvar();
+        registrarDia();
+        if (salvoEl) salvoEl.textContent = "Salvo às " + horarioAgora();
+      }, 450);
+    });
+
+    textarea.addEventListener("blur", salvarAgora);
+
+    main.querySelectorAll("[data-check]").forEach(function (caixa) {
+      caixa.addEventListener("change", function () {
+        var indice = Number(caixa.getAttribute("data-check"));
+        entrada.checklist[indice] = caixa.checked;
+        entrada.atualizadoEm = new Date().toISOString();
+        atualizarChecklist();
+        salvarAgora();
+      });
+    });
+
+    if (botaoTimer) {
+      botaoTimer.addEventListener("click", function () {
+        if (entrada.rodando) {
+          if (timerRedacao) clearInterval(timerRedacao);
+          timerRedacao = null;
+          entrada.rodando = false;
+          salvarAgora();
+          atualizarTimer();
+          return;
+        }
+        entrada.rodando = true;
+        salvar();
+        if (timerRedacao) clearInterval(timerRedacao);
+        timerRedacao = setInterval(function () {
+          entrada.tempoSegundos = (entrada.tempoSegundos || 0) + 1;
+          if (entrada.tempoSegundos % 10 === 0) salvar();
+          atualizarTimer();
+        }, 1000);
+        atualizarTimer();
+      });
+    }
+
+    if (botaoConcluir) {
+      botaoConcluir.addEventListener("click", function () {
+        if (!entrada.concluida && !contarPalavras(textarea.value)) {
+          mostrarAviso("Escreva pelo menos algumas palavras antes de concluir.");
+          textarea.focus();
+          return;
+        }
+        entrada.concluida = !entrada.concluida;
+        entrada.atualizadoEm = new Date().toISOString();
+        salvarAgora();
+        atualizarConcluir();
+        mostrarAviso(entrada.concluida ? "Redação marcada como concluída." : "Redação reaberta para edição.");
+      });
+    }
+
+    var botaoBaixar = main.querySelector('[data-redacao="baixar"]');
+    if (botaoBaixar) {
+      botaoBaixar.addEventListener("click", function () {
+        var partes = [
+          proposta.titulo,
+          proposta.genero + " · " + proposta.obra,
+          "",
+          "COMANDO",
+          proposta.comando,
+          "",
+          "TEXTO",
+          textarea.value || "(rascunho vazio)",
+          "",
+          "Palavras: " + contarPalavras(textarea.value) + " · Tempo: " + formatarTempo(entrada.tempoSegundos || 0)
+        ];
+        var blob = new Blob([partes.join("\n")], { type: "text/plain;charset=utf-8" });
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement("a");
+        a.href = url;
+        a.download = "redacao-" + proposta.id + "-" + dataISO() + ".txt";
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+        mostrarAviso("Redação baixada.");
+      });
+    }
+
+    var botaoApagar = main.querySelector('[data-redacao="apagar"]');
+    if (botaoApagar) {
+      botaoApagar.addEventListener("click", function () {
+        if (!window.confirm("Apagar o rascunho desta proposta? Esta ação não pode ser desfeita.")) return;
+        if (timerRedacao) clearInterval(timerRedacao);
+        timerRedacao = null;
+        delete estado.redacoes[id];
+        salvar();
+        mostrarAviso("Rascunho apagado.");
+        irPara("#/redacao");
+      });
+    }
+
+    atualizarFaixa();
+    atualizarTimer();
+    atualizarConcluir();
+  }
+
   function viewProgresso() {
     marcarNav("progresso");
     atualizarTitulo("Meu progresso");
@@ -1262,6 +1707,7 @@
     var cards = totalFlashcards();
     var media = mediaQuizzes();
     var seq = calcularSequencia();
+    var redacao = progressoRedacao();
 
     var linhas = MATERIAS.map(function (m) {
       var p = progressoMateria(m);
@@ -1283,7 +1729,7 @@
       ? '<section class="secao"><div class="secao-cabecalho"><h2 class="titulo-secao">Simulados recentes</h2><a class="link-seta" href="#/simulado">Novo simulado ' + ICONES.setaDireita + "</a></div>" +
         '<div class="historico-simulados">' + estado.simulados.slice(0, 5).map(function (s) {
           return '<div class="item-historico">' +
-            "<strong>" + s.acertos + "/" + s.total + " · " + s.porcento + "%</strong>" +
+            "<strong>" + s.acertos + "/" + s.total + " · " + s.porcento + "%" + (s.nivel === "desafio" ? ' <span class="pilula desafio">Desafio</span>' : "") + "</strong>" +
             "<span>" + formatarData(s.data) + " · " + formatarTempo(s.tempo || 0) + "</span>" +
           "</div>";
         }).join("") + "</div></section>"
@@ -1309,6 +1755,15 @@
         "</div>" +
       "</section>" +
       historico +
+      '<section class="secao">' +
+        '<div class="secao-cabecalho"><h2 class="titulo-secao">Treino de redação</h2><a class="link-seta" href="#/redacao">Abrir propostas ' + ICONES.setaDireita + "</a></div>" +
+        '<div class="cartao redacao-resumo-progresso">' +
+          '<div class="redacao-resumo-numero">' + redacao.concluidas + "<small>/" + redacao.total + "</small></div>" +
+          "<div class=\"redacao-resumo-texto\"><p>" + plural(redacao.concluidas, "proposta concluída", "propostas concluídas") + " · " + redacao.comRascunho + " com rascunho salvo</p>" +
+            '<div class="barra-progresso" aria-hidden="true"><span style="width:' + redacao.porcento + '%"></span></div>' +
+          "</div>" +
+        "</div>" +
+      "</section>" +
       '<section class="secao">' +
         '<div class="secao-cabecalho"><h2 class="titulo-secao">Seus dados</h2></div>' +
         '<p class="subtitulo" style="font-size:14px">Exporte um arquivo para guardar seu progresso ou levar para outro navegador. A importação substitui os dados atuais.</p>' +
@@ -1384,6 +1839,7 @@
       anotacoes: dados.anotacoes && typeof dados.anotacoes === "object" ? dados.anotacoes : base.anotacoes,
       quizzes: dados.quizzes && typeof dados.quizzes === "object" ? dados.quizzes : base.quizzes,
       flashcards: dados.flashcards && typeof dados.flashcards === "object" ? dados.flashcards : base.flashcards,
+      redacoes: dados.redacoes && typeof dados.redacoes === "object" ? dados.redacoes : base.redacoes,
       dias: Array.isArray(dados.dias) ? dados.dias : base.dias,
       ultimoTopico: dados.ultimoTopico && typeof dados.ultimoTopico === "object" ? dados.ultimoTopico : base.ultimoTopico,
       simulados: Array.isArray(dados.simulados) ? dados.simulados : base.simulados

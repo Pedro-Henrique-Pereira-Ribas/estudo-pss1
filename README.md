@@ -1,6 +1,6 @@
 # Caderno PSS 1 2026
 
-Site de estudos **offline** para o Processo Seletivo Seriado 1 da CPS (2026), com resumos, flashcards, quizzes por matéria e simulado cronometrado.
+Site de estudos **offline** para o Processo Seletivo Seriado 1 da CPS (2026), com resumos, flashcards, quizzes por matéria, quizzes desafiadores, simulado cronometrado e treino de redação.
 
 O projeto é feito em HTML, CSS e JavaScript puros: não precisa de instalação, build nem servidor para usar.
 
@@ -9,8 +9,9 @@ O projeto é feito em HTML, CSS e JavaScript puros: não precisa de instalação
 - **9 matérias**: Arte, Educação Física, Língua Portuguesa, Inglês, Espanhol, Biologia, Química, Matemática e Geografia.
 - **207 tópicos** com resumo, pontos principais, pegadinhas e glossário.
 - **102 flashcards** para revisão ativa.
-- **150 questões** comentadas, organizadas por matéria e tópico.
-- **Simulado geral** com questões sorteadas e cronômetro.
+- **195 questões** comentadas, organizadas por matéria e tópico (150 de revisão completa + 45 de desafio).
+- **Simulado geral** com questões sorteadas, cronômetro e modo Desafio PSS 1.
+- **Treino de redação** com 6 propostas: dois comentários de internet (Os Homens de Barro e Cumbe), um comentário de tema contemporâneo e três narrações escolares (aventura, fantástica e continuidade). Inclui rascunho salvo, cronômetro, contador de palavras e checklist de autoavaliação.
 - **Tema claro e escuro**, com botão de alternância, preferência salva e respeito ao tema do sistema.
 - **Progresso local**: tópicos estudados, melhores notas, histórico de simulados, flashcards e anotações.
 - **Exportar/importar progresso** em JSON e opção de apagar os dados.
@@ -19,7 +20,7 @@ O projeto é feito em HTML, CSS e JavaScript puros: não precisa de instalação
 
 1. Abra o arquivo `index.html` no navegador (Chrome, Edge, Firefox ou Safari).
 2. Navegue pelas matérias no menu lateral.
-3. Use os flashcards, faça os quizzes e acompanhe tudo em **Meu progresso**.
+3. Use os flashcards, faça os quizzes (revisão completa ou Desafio PSS 1), o simulado cronometrado e o **treino de redação** na rota `#/redacao`. Acompanhe tudo em **Meu progresso**.
 
 O progresso fica salvo no `localStorage` do próprio navegador, na chave `pss1-caderno-v1`. A preferência de tema usa a chave `pss1-tema`. Nada é enviado para nenhum servidor. Se você limpar os dados do navegador, o histórico é apagado; por isso, exporte um backup de vez em quando na página de progresso.
 
@@ -45,17 +46,19 @@ O progresso fica salvo no `localStorage` do próprio navegador, na chave `pss1-c
 │       └── dados/
 │           ├── arte.js
 │           ├── biologia.js
+│           ├── desafios.js
 │           ├── edfisica.js
 │           ├── espanhol.js
 │           ├── geografia.js
 │           ├── ingles.js
 │           ├── matematica.js
 │           ├── portugues.js
-│           └── quimica.js
+│           ├── quimica.js
+│           └── redacao.js
 └── README.md
 ```
 
-Cada arquivo em `assets/js/dados/` registra uma matéria em `window.PSS_DADOS`. O `app.js` lê esses dados e monta as rotas da aplicação.
+Cada arquivo em `assets/js/dados/` registra uma matéria em `window.PSS_DADOS`. O `app.js` lê esses dados e monta as rotas da aplicação. Os arquivos `desafios.js` e `redacao.js` registram, respectivamente, `window.PSS_DESAFIOS` (questões com `nivel: "desafio"`) e `window.PSS_REDACAO` (propostas de treino de redação), que são mesclados pelo `app.js`.
 
 ### Formato dos dados
 
