@@ -6,11 +6,11 @@ O projeto é feito em HTML, CSS e JavaScript puros: não precisa de instalação
 
 ## Conteúdo
 
-- **9 matérias**: Arte, Educação Física, Língua Portuguesa, Inglês, Espanhol, Biologia, Química, Matemática e Geografia.
+- **8 disciplinas + 1 opção de língua estrangeira**: Arte, Educação Física, Língua Portuguesa, Biologia, Química, Matemática, Geografia e Inglês ou Espanhol (o candidato escolhe uma das duas opções).
 - **207 tópicos** com resumo, pontos principais, pegadinhas e glossário.
 - **102 flashcards** para revisão ativa.
 - **195 questões** comentadas, organizadas por matéria e tópico (150 de revisão completa + 45 de desafio).
-- **Simulado geral** com questões sorteadas, cronômetro e modo Desafio PSS 1.
+- **Simulado geral** com questões sorteadas, cronômetro e modo Desafio PSS 1. O simulado de distribuição oficial reproduz as 60 questões do manual CPS/UEPG 2026 e permite selecionar Inglês ou Espanhol.
 - **Treino de redação** com 6 propostas: dois comentários de internet (Os Homens de Barro e Cumbe), um comentário de tema contemporâneo e três narrações escolares (aventura, fantástica e continuidade). Inclui rascunho salvo, cronômetro, contador de palavras e checklist de autoavaliação.
 - **Tema claro e escuro**, com botão de alternância, preferência salva e respeito ao tema do sistema.
 - **Progresso local**: tópicos estudados, melhores notas, histórico de simulados, flashcards e anotações.
