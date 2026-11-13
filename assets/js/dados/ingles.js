@@ -1,11 +1,11 @@
 window.PSS_DADOS = window.PSS_DADOS || {};
 window.PSS_DADOS.ingles = {
   id: "ingles",
-  nome: "Inglês",
+  nome: "Inglês (Língua Estrangeira)",
   sigla: "ING",
   cor: "#4d6a8a",
   ordem: 4,
-  descricao: "Leitura, interpretação e gramática da língua inglesa para o PSS 1.",
+  descricao: "Opção de língua estrangeira: inglês. Na prova, escolha inglês ou espanhol, não os dois. Leitura, interpretação e gramática da língua inglesa para o PSS 1.",
   topicos: [
     {
       id: "ingles-4-1-1",
