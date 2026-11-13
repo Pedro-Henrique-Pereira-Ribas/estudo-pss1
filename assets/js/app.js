@@ -1153,6 +1153,14 @@
           "</div>" +
         "</fieldset>" +
         '<fieldset class="campo-grupo" style="border:0;padding:0">' +
+          "<legend>Língua estrangeira da prova oficial</legend>" +
+          '<div class="opcoes-radio">' +
+            '<label class="opcao-radio"><input type="radio" name="linguaEstrangeira" value="ingles" checked><span>Inglês</span></label>' +
+            '<label class="opcao-radio"><input type="radio" name="linguaEstrangeira" value="espanhol"><span>Espanhol</span></label>' +
+          "</div>" +
+          '<p class="nota-rodape">A prova cobra apenas uma língua estrangeira. Escolha a mesma opção feita na inscrição. Essa seleção é usada no simulado de distribuição oficial.</p>' +
+        "</fieldset>" +
+        '<fieldset class="campo-grupo" style="border:0;padding:0">' +
           "<legend>Nível</legend>" +
           '<div class="opcoes-radio">' +
             '<label class="opcao-radio"><input type="radio" name="nivel" value="desafio"' + (totalDesafio ? " checked" : " disabled") + '><span>Desafio PSS 1 · ' + (totalDesafio || "em breve") + '</span></label>' +
@@ -1188,11 +1196,15 @@
         evento.preventDefault();
         var dadosForm = new FormData(form);
         var tipoSimulado = dadosForm.get("tipoSimulado") || "geral";
-        var nivel = dadosForm.get("nivel") === "desafio" && totalDesafio ? "desafio" : "revisao";
+        var nivel = tipoSimulado === "oficial" ? "revisao" : (dadosForm.get("nivel") === "desafio" && totalDesafio ? "desafio" : "revisao");
         var limiteModo = nivel === "desafio" ? totalDesafio : total;
         var itens;
         if (tipoSimulado === "oficial") {
-          itens = montarSimulado(null, nivel === "desafio", DISTRIBUICAO_OFICIAL_PSS1);
+          var distribuicaoOficial = Object.assign({}, DISTRIBUICAO_OFICIAL_PSS1);
+          var linguaEscolhida = dadosForm.get("linguaEstrangeira") === "espanhol" ? "espanhol" : "ingles";
+          distribuicaoOficial.ingles = linguaEscolhida === "ingles" ? 5 : 0;
+          distribuicaoOficial.espanhol = linguaEscolhida === "espanhol" ? 5 : 0;
+          itens = montarSimulado(null, false, distribuicaoOficial);
         } else {
           var quantidade = Number(dadosForm.get("quantidade")) || Math.min(20, limiteModo);
           var segundos = Number(dadosForm.get("tempo")) || 0;
