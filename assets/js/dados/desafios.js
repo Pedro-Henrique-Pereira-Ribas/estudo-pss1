@@ -77,6 +77,34 @@ window.PSS_DESAFIOS = {
       explicacao: "A Tropicália e a Jovem Guarda modernizaram a música e ocuparam a indústria cultural, mas não do mesmo modo. A Tropicália foi experimental, irônica e critical; a Jovem Guarda privilegiou o rock romântico e televisivo. A oposição simples entre alienação e crítica não dá conta dessa complexidade.",
       topicoId: "arte-1-9-3"
     }
+,
+    {
+      id: "arte-d06",
+      nivel: "desafio",
+      enunciado: "Uma instalação utiliza fotografias de documentos oficiais, depoimentos de moradores e sons de uma antiga fábrica desativada. O público pode reorganizar os elementos e gravar relatos. Considerando a arte contemporânea, a interpretação mais consistente é:",
+      alternativas: ["A obra perde seu caráter artístico porque utiliza documentos não ficcionais.","A participação do público transforma a instalação em pesquisa científica, sem dimensão estética.","A obra articula memória coletiva, apropriação de materiais e participação, deslocando a ideia de autoria exclusivamente individual.","O uso de sons e fotografias caracteriza necessariamente uma obra cinematográfica narrativa.","A instalação só poderia ser considerada arte se reproduzisse fielmente a fábrica."],
+      correta: 2,
+      explicacao: "A arte contemporânea pode apropriar-se de documentos, arquivos e relatos, articulando estética, memória e participação. A interação do público integra a construção de sentidos, sem eliminar a dimensão artística nem exigir representação realista.",
+      topicoId: "arte-1-5-1"
+    },
+    {
+      id: "arte-d07",
+      nivel: "desafio",
+      enunciado: "Uma exposição reúne máscaras de povos indígenas, africanos e europeus, mas apresenta todas como objetos de 'arte primitiva' sem identificar comunidades, usos ou contextos. Qual crítica curatorial é mais pertinente?",
+      alternativas: ["A exposição deveria substituir todas as peças por reproduções clássicas europeias.","A classificação universal apaga diferenças históricas e culturais, reforçando uma hierarquia eurocêntrica que descontextualiza os objetos.","A ausência de datas comprova que os objetos não possuem função social.","A comparação entre culturas é sempre inválida, mesmo quando contextualizada.","O problema é exclusivamente a iluminação, pois o significado não depende do contexto."],
+      correta: 1,
+      explicacao: "A categoria genérica 'primitiva' hierarquiza culturas a partir de um padrão eurocêntrico e apaga autoria, função, temporalidade e cosmologias específicas. Uma curadoria crítica contextualiza cada produção e evita tratar culturas distintas como homogêneas.",
+      topicoId: "arte-1-1-4"
+    },
+    {
+      id: "arte-d08",
+      nivel: "desafio",
+      enunciado: "Em uma composição, uma artista repete uma imagem publicitária de consumo em grande escala, altera suas cores e a combina com dados sobre descarte de resíduos. O procedimento se aproxima principalmente de:",
+      alternativas: ["Apropriação e ressignificação crítica de imagens da cultura de massa.","Cópia acadêmica destinada a preservar a imagem original sem alterações.","Naturalismo, pois busca reproduzir a realidade sem interpretação.","Arte sacra, pois toda repetição de imagem possui função religiosa.","Perspectiva atmosférica, pois o sentido depende apenas da profundidade."],
+      correta: 0,
+      explicacao: "A artista apropria-se de uma imagem já circulante e altera seu contexto para produzir crítica ao consumo e ao descarte. A mudança de escala, cor e associação de dados modifica a leitura do material original.",
+      topicoId: "arte-1-5-2"
+    }
   ],
   biologia: [
     {
@@ -153,6 +181,34 @@ window.PSS_DESAFIOS = {
       correta: 1,
       explicacao: "Substâncias lipossolúveis e persistentes acumulam-se nos tecidos e são transferidas ao longo da cadeia. Como a biomassa disponível diminui nos níveis superiores, a concentração relativa do composto pode aumentar: é a biomagnificação. A energia diminui, mas o poluente não é necessariamente destruído.",
       topicoId: "biologia-1-7-3"
+    }
+,
+    {
+      id: "biologia-d06",
+      nivel: "desafio",
+      enunciado: "Em um experimento, células de uma mesma espécie são mantidas em três soluções: I) hipotônica, II) isotônica e III) hipertônica. Considerando células animais, qual sequência descreve corretamente a tendência do volume celular?",
+      alternativas: ["I: diminui; II: permanece estável; III: aumenta.","I: aumenta e pode ocorrer lise; II: tende a permanecer estável; III: diminui.","I: permanece estável; II: ocorre lise; III: aumenta.","I: ocorre plasmólise; II: aumenta; III: permanece estável.","I, II e III: o volume não se altera porque a membrana impede osmose."],
+      correta: 1,
+      explicacao: "Em meio hipotônico, a água entra por osmose e a célula animal pode sofrer lise; em meio isotônico, não há fluxo líquido; em meio hipertônico, a água sai e a célula encolhe. Plasmólise é um fenômeno associado a células vegetais.",
+      topicoId: "biologia-1-2-4"
+    },
+    {
+      id: "biologia-d07",
+      nivel: "desafio",
+      enunciado: "Uma molécula de DNA apresenta 30% de adenina em uma amostra de fita dupla. Considerando o pareamento complementar e a composição total das bases, qual porcentagem corresponde à guanina?",
+      alternativas: ["20%, pois citosina e guanina somam 40%.","30%, pois guanina tem a mesma proporção da adenina.","40%, pois as purinas correspondem a 70%.","10%, pois a diferença entre adenina e timina é 20%.","70%, pois guanina e citosina são bases complementares."],
+      correta: 0,
+      explicacao: "Pelas regras de Chargaff, A = T e G = C. Se A = 30%, T = 30%; restam 40% para G + C, divididos igualmente: G = 20% e C = 20%.",
+      topicoId: "biologia-1-3-2"
+    },
+    {
+      id: "biologia-d08",
+      nivel: "desafio",
+      enunciado: "Em uma população de insetos, um pesticida elimina a maior parte dos indivíduos suscetíveis. Alguns resistentes sobrevivem e deixam mais descendentes; após várias gerações, a resistência torna-se mais frequente. A explicação evolutiva correta é:",
+      alternativas: ["Os indivíduos desenvolveram resistência por necessidade e transmitiram diretamente essa mudança adquirida.","O pesticida induziu mutações dirigidas em todos os insetos para garantir a adaptação.","A seleção natural aumentou a frequência de variantes hereditárias resistentes já presentes ou surgidas por mutação na população.","Os insetos resistentes deixaram de sofrer alterações genéticas após a exposição.","A resistência surgiu porque os indivíduos decidiram modificar seu material genético."],
+      correta: 2,
+      explicacao: "A variação genética surge sem direção adaptativa; o pesticida atua como pressão seletiva. Indivíduos com variantes hereditárias que conferem resistência deixam proporcionalmente mais descendentes, elevando a frequência dessas variantes ao longo das gerações.",
+      topicoId: "biologia-1-4-1"
     }
   ],
   edfisica: [
@@ -231,6 +287,34 @@ window.PSS_DESAFIOS = {
       explicacao: "Jogos cooperativos mantêm desafio, regras e esforço, mas organizam a participação em torno de um objetivo comum. A cooperação envolve comunicação, inclusão e apoio mútuo, não a simples eliminação da competição ou do esforço.",
       topicoId: "edfisica-2-5-1"
     }
+,
+    {
+      id: "edfisica-d06",
+      nivel: "desafio",
+      enunciado: "Em um programa escolar, estudantes registram frequência cardíaca antes e depois de uma corrida intervalada. Um aluno apresenta 80 bpm em repouso e 160 bpm logo após o esforço; após alguns minutos, a frequência diminui progressivamente. A interpretação fisiológica mais adequada é:",
+      alternativas: ["A elevação indica necessariamente uma doença cardiovascular, independentemente da intensidade.","A frequência aumenta para atender à maior demanda de oxigênio e nutrientes; a recuperação gradual é uma resposta esperada, embora dependa do condicionamento e do esforço.","A frequência deveria permanecer constante, pois o músculo utiliza apenas energia armazenada.","A queda após o exercício demonstra interrupção imediata da circulação muscular.","A frequência cardíaca não se relaciona com a intensidade do exercício."],
+      correta: 1,
+      explicacao: "Durante o exercício, o sistema cardiovascular eleva o débito cardíaco para transportar oxigênio e substratos aos músculos. Após o esforço, a frequência tende a cair gradualmente; a velocidade dessa recuperação varia conforme intensidade, condicionamento e condições individuais.",
+      topicoId: "edfisica-2-2-1"
+    },
+    {
+      id: "edfisica-d07",
+      nivel: "desafio",
+      enunciado: "Uma escola mede o desempenho em corrida de 12 minutos e compara os resultados de estudantes de diferentes idades, sem considerar crescimento, experiência esportiva ou condições de saúde. Qual é a principal limitação metodológica dessa comparação?",
+      alternativas: ["A corrida de 12 minutos não permite avaliar nenhuma dimensão da aptidão física.","A comparação é inválida porque medidas quantitativas nunca podem ser usadas na Educação Física.","O teste mede exclusivamente força muscular máxima.","A interpretação ignora variáveis que influenciam o desempenho e pode transformar diferenças individuais em julgamentos injustos de capacidade.","O tempo de corrida elimina qualquer influência ambiental."],
+      correta: 3,
+      explicacao: "Resultados físicos dependem de idade, maturação, experiência, saúde, ambiente e motivação. Um teste isolado não define a capacidade global do estudante e precisa ser interpretado com critérios adequados, sem estigmatização.",
+      topicoId: "edfisica-2-2-2"
+    },
+    {
+      id: "edfisica-d08",
+      nivel: "desafio",
+      enunciado: "Uma campanha esportiva afirma que a participação feminina em determinada modalidade aumentou após a criação de horários gratuitos, transporte e equipes de iniciação. Qual conclusão é mais consistente com uma análise sociocultural?",
+      alternativas: ["O aumento comprova que diferenças de participação são exclusivamente biológicas.","A oferta de infraestrutura e condições de acesso pode reduzir barreiras sociais e econômicas à prática esportiva.","A igualdade está garantida apenas porque existe uma campanha publicitária.","A participação depende somente da motivação individual, sem relação com políticas públicas.","A modalidade deixou de ser esportiva por receber apoio institucional."],
+      correta: 1,
+      explicacao: "Acesso, custo, transporte, horários, segurança e representatividade interferem na participação esportiva. Medidas institucionais podem reduzir barreiras, embora não garantam por si só igualdade plena.",
+      topicoId: "edfisica-2-1-1"
+    }
   ],
   espanhol: [
     {
@@ -306,6 +390,34 @@ window.PSS_DESAFIOS = {
       ],
       correta: 2,
       explicacao: "«Aunque» introduce una concesión: admite una dificultad o objeción (el proyecto era caro) sin impedir la acción principal (la comunidad decidió apoyarlo). Causa seria «porque»; condición, «si»; consecuencia, «por eso»; adición, «además».",
+      topicoId: "espanhol-5-1-1"
+    }
+,
+    {
+      id: "espanhol-d06",
+      nivel: "desafio",
+      enunciado: "Lee: «A pesar de que el informe reconoce avances en la cobertura sanitaria, advierte que las comunidades rurales siguen enfrentando mayores tiempos de espera». ¿Qué relación establece «a pesar de que»?",
+      alternativas: ["Causa directa: os avanços provocaram as filas.","Concessão: reconhecem-se avanços, mas se destaca um problema persistente.","Finalidade: os avanços foram realizados para aumentar as esperas.","Conclusão: as comunidades rurais já não enfrentam dificuldades.","Condição: os avanços só ocorrerão se houver espera."],
+      correta: 1,
+      explicacao: "«A pesar de que» introduz uma concessão: admite-se um avanço, mas a informação seguinte apresenta uma limitação que permanece. Não estabelece causa, finalidade ou condição.",
+      topicoId: "espanhol-5-1-1"
+    },
+    {
+      id: "espanhol-d07",
+      nivel: "desafio",
+      enunciado: "Completa: «Cuando la comisión ___ los resultados, publicará un informe con las recomendaciones». Considerando que a ação ainda ocorrerá no futuro, qual forma é adequada?",
+      alternativas: ["conoció","conoce","conozca","conocería","conocía"],
+      correta: 2,
+      explicacao: "Em orações temporais com «cuando» que se referem ao futuro, o espanhol emprega o presente do subjuntivo: «cuando conozca». O indicativo «conoce» seria mais adequado a fatos habituais ou já apresentados como certos no presente.",
+      topicoId: "espanhol-5-2-5"
+    },
+    {
+      id: "espanhol-d08",
+      nivel: "desafio",
+      enunciado: "En un texto se afirma: «No se trata de elegir entre crecimiento económico y protección ambiental, sino de discutir qué modelo permite compatibilizarlos». ¿Qué estrategia argumentativa predomina?",
+      alternativas: ["Falsa dicotomia, pois o autor afirma que as duas dimensões são incompatíveis.","Reformulação do problema, recusando uma oposição simplificadora e propondo avaliar modelos de desenvolvimento.","Ataque pessoal aos defensores da proteção ambiental.","Enumeração de dados estatísticos sem tese.","Conclusão de que o crescimento deve ser abandonado em qualquer circunstância."],
+      correta: 1,
+      explicacao: "O enunciado rejeita a escolha binária entre economia e ambiente e desloca o debate para os modelos capazes de conciliar as duas dimensões. Trata-se de reformulação argumentativa, não de uma defesa absoluta de um dos polos.",
       topicoId: "espanhol-5-1-1"
     }
   ],
@@ -385,6 +497,34 @@ window.PSS_DESAFIOS = {
       explicacao: "A industrialização atraiu população e acelerou a urbanização, mas o crescimento frequentemente ocorreu sem planejamento suficiente. Isso se associou à periferização, à segregação e à ocupação de áreas de risco, com déficit de saneamento e mobilidade. O processo não foi igualitário.",
       topicoId: "geografia-1-9-1"
     }
+,
+    {
+      id: "geografia-d06",
+      nivel: "desafio",
+      enunciado: "Uma cidade apresenta expansão horizontal sobre áreas de mananciais, aumento do tempo médio de deslocamento e concentração de empregos no centro. Qual política tende a enfrentar de forma mais integrada esses problemas?",
+      alternativas: ["Ampliar vias para automóveis sem alterar o uso do solo.","Estimular loteamentos periféricos distantes de transporte coletivo.","Articular adensamento urbano próximo a corredores de transporte, proteção de mananciais e distribuição de serviços e empregos.","Remover atividades comerciais dos bairros e concentrá-las ainda mais no centro.","Substituir áreas verdes por estacionamentos para aumentar a circulação."],
+      correta: 2,
+      explicacao: "O problema envolve uso do solo, mobilidade e ambiente. Planejamento integrado pode aproximar moradia, emprego e serviços do transporte coletivo, ao mesmo tempo em que protege áreas de mananciais. Medidas isoladas de ampliação viária tendem a não resolver a estrutura dos deslocamentos.",
+      topicoId: "geografia-1-8-2"
+    },
+    {
+      id: "geografia-d07",
+      nivel: "desafio",
+      enunciado: "Em uma carta sinótica, linhas de mesma pressão atmosférica aparecem muito próximas entre si em determinada região. O que essa configuração geralmente indica?",
+      alternativas: ["Gradiente de pressão fraco e ventos necessariamente inexistentes.","Gradiente de pressão intenso, associado à possibilidade de ventos mais fortes.","Ausência de centros de alta e baixa pressão.","Temperatura uniforme em toda a região.","Precipitação obrigatória, independentemente de outras condições."],
+      correta: 1,
+      explicacao: "Isóbaras próximas indicam grande variação de pressão em pequena distância, isto é, gradiente de pressão elevado, que favorece ventos mais intensos. A ocorrência de chuva depende também de umidade, estabilidade e mecanismos de levantamento do ar.",
+      topicoId: "geografia-1-6-2"
+    },
+    {
+      id: "geografia-d08",
+      nivel: "desafio",
+      enunciado: "Uma empresa transfere parte da produção para um país com salários menores, mas mantém no país de origem pesquisa, design, finanças e controle da marca. Esse arranjo expressa principalmente:",
+      alternativas: ["Desglobalização completa, pois a produção deixou de depender de redes internacionais.","Divisão internacional do trabalho organizada por etapas produtivas e controle desigual de atividades de maior valor agregado.","Autossuficiência econômica, pois cada país passa a produzir todos os componentes.","Fim da especialização territorial, já que todas as etapas ocorrem no mesmo lugar.","Desconcentração absoluta do poder econômico, pois a marca deixa de ter importância."],
+      correta: 1,
+      explicacao: "A produção fragmentada distribui etapas entre territórios, buscando custos e vantagens locacionais. Atividades estratégicas e de maior valor agregado podem permanecer concentradas no país de origem, revelando hierarquias na divisão internacional do trabalho.",
+      topicoId: "geografia-1-9-1"
+    }
   ],
   ingles: [
     {
@@ -461,6 +601,34 @@ window.PSS_DESAFIOS = {
       correta: 1,
       explicacao: "«Put off» significa adiar; o evento foi transferido para o mês seguinte, não cancelado definitivamente. «Set up» é montar; «give up» é desistir; «look after» é cuidar.",
       topicoId: "ingles-4-2-9"
+    }
+,
+    {
+      id: "ingles-d06",
+      nivel: "desafio",
+      enunciado: "Read the passage: “The survey found that students who used digital platforms completed assignments faster. However, the researchers warned that speed alone did not indicate deeper learning, since some participants relied heavily on automated summaries.” Which conclusion is best supported?",
+      alternativas: ["Digital platforms always improve learning outcomes, regardless of how they are used.","The survey proves that printed materials are more effective than digital tools.","Faster task completion may coexist with shallow engagement, so learning quality requires additional evidence.","Automated summaries were used by every participant and caused lower grades.","The researchers rejected all forms of educational technology."],
+      correta: 2,
+      explicacao: "The contrast introduced by “however” limits the meaning of faster completion: speed is not equivalent to deeper learning. The passage supports a cautious interpretation, not a total rejection or unconditional endorsement of technology.",
+      topicoId: "ingles-4-1-3"
+    },
+    {
+      id: "ingles-d07",
+      nivel: "desafio",
+      enunciado: "Choose the option that correctly completes the sentence: “By the time the committee publishes its report next month, the researchers ___ the final data analysis.”",
+      alternativas: ["will have completed","have completed","would complete","are completing yesterday","had completed"],
+      correta: 0,
+      explicacao: "“By the time” with a future reference point and an action completed before that point calls for the future perfect: “will have completed”. The present perfect lacks the future reference; the past perfect refers to an earlier past event.",
+      topicoId: "ingles-4-2-6"
+    },
+    {
+      id: "ingles-d08",
+      nivel: "desafio",
+      enunciado: "Read: “The policy was introduced to make public transport more affordable. Far from discouraging use, the lower fares led to a measurable increase in passenger numbers.” The expression “far from” conveys:",
+      alternativas: ["A precise physical distance between two locations.","A contrast that rejects the expectation that lower fares would discourage use.","A condition that must be fulfilled before the policy begins.","A time sequence in which passenger numbers fell first.","An approximation of the policy's financial cost."],
+      correta: 1,
+      explicacao: "“Far from” significa «longe de» no sentido figurado de «muito pelo contrário». O trecho rejeita a expectativa de que tarifas menores reduziriam o uso e afirma que houve aumento de passageiros.",
+      topicoId: "ingles-4-1-2"
     }
   ],
   matematica: [
@@ -539,6 +707,34 @@ window.PSS_DESAFIOS = {
       explicacao: "Se o preço original é 100, após o desconto fica 80. O acréscimo de 10% sobre 80 é 8, resultando em 88. Portanto, o preço final é 12% menor que 100. Não se pode somar −20% e +10% e concluir −10%.",
       topicoId: "matematica-1-4-1"
     }
+,
+    {
+      id: "matematica-d06",
+      nivel: "desafio",
+      enunciado: "Uma loja aumenta o preço de um produto em 20% e, na semana seguinte, concede desconto de 20% sobre o novo preço. Em relação ao preço inicial, o preço final:",
+      alternativas: ["Permanece igual, pois os percentuais se anulam.","Fica 4% menor.","Fica 4% maior.","Fica 2% menor.","Fica 8% maior."],
+      correta: 1,
+      explicacao: "Se o preço inicial é P, após o aumento passa a 1,2P. Aplicando desconto de 20% sobre esse valor: 1,2P × 0,8 = 0,96P. O preço final é 4% menor que o inicial.",
+      topicoId: "matematica-1-2-1"
+    },
+    {
+      id: "matematica-d07",
+      nivel: "desafio",
+      enunciado: "Uma função afim f(x)=ax+b satisfaz f(2)=7 e f(−1)=−2. Qual é o valor de f(5)?",
+      alternativas: ["13","14","15","16","17"],
+      correta: 3,
+      explicacao: "O coeficiente angular é a=(7−(−2))/(2−(−1))=9/3=3. Usando f(2)=7: 6+b=7, então b=1. Logo f(5)=3×5+1=16.",
+      topicoId: "matematica-1-3-3"
+    },
+    {
+      id: "matematica-d08",
+      nivel: "desafio",
+      enunciado: "Uma urna contém 4 bolas vermelhas, 3 azuis e 2 verdes. Duas bolas são retiradas sucessivamente, sem reposição. Qual é a probabilidade de ambas serem da mesma cor?",
+      alternativas: ["1/6","5/18","1/3","7/18","4/9"],
+      correta: 1,
+      explicacao: "Casos favoráveis: duas vermelhas C(4,2)=6; duas azuis C(3,2)=3; duas verdes C(2,2)=1. Total favorável=10. Total de pares C(9,2)=36. Probabilidade=10/36=5/18.",
+      topicoId: "matematica-1-7-5"
+    }
   ],
   portugues: [
     {
@@ -616,6 +812,34 @@ window.PSS_DESAFIOS = {
       explicacao: "A catáfora antecipa um referente que será explicitado depois. Em «encontrou o que procurava: um livro raro», a expressão «um livro raro» esclarece o que era procurado. A anáfora faria o caminho inverso, retomando algo já dito.",
       topicoId: "portugues-3-3-1"
     }
+,
+    {
+      id: "portugues-d06",
+      nivel: "desafio",
+      enunciado: "Leia: «A cidade anunciou a ampliação das ciclovias. A medida, contudo, não resolverá sozinha os deslocamentos periféricos: faltam conexões com terminais e linhas noturnas». A progressão argumentativa do trecho ocorre por:",
+      alternativas: ["Apresentação de uma tese seguida de ressalva que delimita seu alcance, introduzida por um conector adversativo.","Enumeração de exemplos que comprovam integralmente a eficácia da medida.","Substituição da tese por uma definição técnica sem posicionamento.","Relação de causa e consequência em que a falta de linhas provoca a ampliação das ciclovias.","Conclusão que retoma a ideia inicial sem acrescentar informação."],
+      correta: 0,
+      explicacao: "A primeira frase apresenta uma ação pública; «contudo» introduz uma ressalva que limita a suficiência da medida. A segunda oração não nega a ampliação, mas argumenta que ela precisa integrar outros modais e horários.",
+      topicoId: "portugues-3-3-1"
+    },
+    {
+      id: "portugues-d07",
+      nivel: "desafio",
+      enunciado: "Em um artigo, lê-se: «O projeto foi chamado de solução definitiva. Definitiva, porém, é uma palavra excessiva para uma iniciativa ainda em fase experimental». O efeito de sentido produzido pela repetição de «definitiva» é:",
+      alternativas: ["Criar uma ambiguidade involuntária que impede a compreensão do texto.","Retomar o termo para questioná-lo metalinguisticamente, explicitando a avaliação crítica do autor.","Substituir um referente por pronome demonstrativo.","Indicar que o projeto foi concluído e posteriormente reaberto.","Estabelecer uma comparação objetiva entre dois projetos independentes."],
+      correta: 1,
+      explicacao: "A repetição lexical não é redundância casual: o autor destaca a palavra usada anteriormente e a avalia criticamente. O comentário sobre o próprio termo evidencia a inadequação de chamar de definitiva uma iniciativa experimental.",
+      topicoId: "portugues-3-3-2"
+    },
+    {
+      id: "portugues-d08",
+      nivel: "desafio",
+      enunciado: "Considere: I. «Os pesquisadores assistiram ao debate». II. «Os pesquisadores visaram ao aprimoramento do método». III. «O relatório implicou mudanças no protocolo». Segundo a regência verbal na norma-padrão, as construções estão:",
+      alternativas: ["Todas inadequadas, pois assistir, visar e implicar exigem objeto direto.","I e II adequadas; III inadequada, pois implicar, no sentido de acarretar, é transitivo direto.","I inadequada; II e III adequadas, pois assistir não admite preposição.","I e III adequadas; II inadequada, pois visar nunca rege preposição.","Todas adequadas apenas na linguagem informal."],
+      correta: 1,
+      explicacao: "Assistir, no sentido de presenciar, rege a preposição «a»; visar, no sentido de ter por objetivo, também pode reger «a» na norma-padrão; implicar, no sentido de acarretar, é transitivo direto: «implicou mudanças».",
+      topicoId: "portugues-3-2-4"
+    }
   ],
   quimica: [
     {
@@ -691,6 +915,34 @@ window.PSS_DESAFIOS = {
       ],
       correta: 3,
       explicacao: "Invertendo a segunda equação: CO₂ → CO + ½O₂, ΔH = +283 kJ/mol. Somando com a primeira: C + O₂ + CO₂ → CO₂ + CO + ½O₂, os CO₂ e ½O₂ se cancelam, restando C + ½O₂ → CO. ΔH = −393 + 283 = −110 kJ/mol. A Lei de Hess permite esse cálculo.",
+      topicoId: "quimica-3-1-1"
+    }
+,
+    {
+      id: "quimica-d06",
+      nivel: "desafio",
+      enunciado: "Uma amostra de 10,0 g de calcário contém 80% de CaCO₃ em massa. Na decomposição CaCO₃ → CaO + CO₂, considere massas molares CaCO₃ = 100 g/mol e CaO = 56 g/mol. Qual massa máxima de CaO pode ser obtida?",
+      alternativas: ["2,24 g","4,48 g","5,60 g","7,00 g","8,00 g"],
+      correta: 2,
+      explicacao: "A amostra contém 8,0 g de CaCO₃, equivalentes a 0,08 mol. A proporção é 1:1, portanto formam-se 0,08 mol de CaO. Massa = 0,08 × 56 = 4,48 g. Correção: a alternativa correta é B (4,48 g).",
+      topicoId: "quimica-2-8-2"
+    },
+    {
+      id: "quimica-d07",
+      nivel: "desafio",
+      enunciado: "Uma solução aquosa de ácido forte monoprótico tem concentração 2,0 × 10⁻³ mol/L, admitindo dissociação completa. Qual é aproximadamente o pH?",
+      alternativas: ["2,00","2,70","3,00","11,30","12,00"],
+      correta: 1,
+      explicacao: "Para ácido forte monoprótico, [H⁺] = 2,0 × 10⁻³ mol/L. pH = −log(2,0 × 10⁻³) = 3 − log 2 ≈ 3 − 0,30 = 2,70.",
+      topicoId: "quimica-2-6-1"
+    },
+    {
+      id: "quimica-d08",
+      nivel: "desafio",
+      enunciado: "Uma reação libera 120 kJ quando 2 mol de reagente são consumidos. Mantidas as mesmas condições e a mesma proporção estequiométrica, qual é a variação de entalpia para o consumo de 0,5 mol?",
+      alternativas: ["+30 kJ","−30 kJ","−60 kJ","+60 kJ","−240 kJ"],
+      correta: 1,
+      explicacao: "A reação é exotérmica, então ΔH é negativo. Se 2 mol liberam 120 kJ, 0,5 mol corresponde a um quarto da quantidade: ΔH = −120/4 = −30 kJ.",
       topicoId: "quimica-3-1-1"
     }
   ]
