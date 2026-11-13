@@ -923,7 +923,7 @@ window.PSS_DESAFIOS = {
       nivel: "desafio",
       enunciado: "Uma amostra de 10,0 g de calcário contém 80% de CaCO₃ em massa. Na decomposição CaCO₃ → CaO + CO₂, considere massas molares CaCO₃ = 100 g/mol e CaO = 56 g/mol. Qual massa máxima de CaO pode ser obtida?",
       alternativas: ["2,24 g","4,48 g","5,60 g","7,00 g","8,00 g"],
-      correta: 2,
+      correta: 1,
       explicacao: "A amostra contém 8,0 g de CaCO₃, equivalentes a 0,08 mol. A proporção é 1:1, portanto formam-se 0,08 mol de CaO. Massa = 0,08 × 56 = 4,48 g. Correção: a alternativa correta é B (4,48 g).",
       topicoId: "quimica-2-8-2"
     },
