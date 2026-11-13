@@ -1,11 +1,11 @@
 window.PSS_DADOS = window.PSS_DADOS || {};
 window.PSS_DADOS.espanhol = {
   id: "espanhol",
-  nome: "Espanhol",
+  nome: "Espanhol (Língua Estrangeira)",
   sigla: "ESP",
   cor: "#9a5f3f",
   ordem: 5,
-  descricao: "Leitura, gramática e comunicação em espanhol para o PSS 1, com atenção aos falsos amigos e às formas de tratamento.",
+  descricao: "Opção de língua estrangeira: espanhol. Na prova, escolha inglês ou espanhol, não os dois. Leitura, gramática e comunicação em espanhol para o PSS 1, com atenção aos falsos amigos e às formas de tratamento.",
   topicos: [
     {
       id: "espanhol-5-1-1",
