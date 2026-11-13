@@ -461,6 +461,46 @@ window.PSS_DADOS.espanhol = {
       correta: 3,
       explicacao: "Embarazada significa grávida, não embaraçada; vaso é copo, enquanto copa designa taça, normalmente de vinho, ou troféu. A frase está adequada: a irmã está grávida e pediu um copo de água. Vaso sanitário é inodoro, e vaso também pode nomear um recipiente de flores, mas não prato.",
       topicoId: "espanhol-5-1-1"
+    },
+    {
+      id: "espanhol-q11",
+      enunciado: "Lee el aviso: «El museo permanecerá cerrado el lunes por tareas de mantenimiento. Las visitas se reanudarán el martes en el horario habitual». Qual informação pode ser concluída corretamente?",
+      alternativas: ["O museu ficará fechado durante toda a semana.", "As visitas serão retomadas na terça-feira, no horário de sempre.", "O museu abrirá excepcionalmente na segunda-feira à noite.", "A manutenção será realizada pelos visitantes.", "O horário de terça-feira será divulgado apenas no próximo mês."],
+      correta: 1,
+      explicacao: "O aviso informa que o museu estará fechado na segunda-feira para manutenção e que as visitas voltarão na terça, no horário habitual. Reanudar significa retomar; permanecerá cerrado significa permanecerá fechado.",
+      topicoId: "espanhol-5-1-1"
+    },
+    {
+      id: "espanhol-q12",
+      enunciado: "En una entrevista, una investigadora afirma: «No basta con reciclar; también es necesario reducir el consumo y reutilizar los materiales». Qual é a relação entre as ideias apresentadas?",
+      alternativas: ["A reciclagem é apresentada como a única solução ambiental possível.", "A pesquisadora rejeita qualquer forma de reutilização.", "A fala amplia a responsabilidade ambiental para além da reciclagem, incluindo redução e reutilização.", "O trecho afirma que consumir mais materiais facilita a preservação.", "A segunda oração contradiz completamente a primeira."],
+      correta: 2,
+      explicacao: "«No basta con» indica que algo, embora útil, não é suficiente. A pesquisadora propõe ações complementares: reduzir o consumo e reutilizar materiais. O trecho não rejeita a reciclagem; amplia o conjunto de atitudes.",
+      topicoId: "espanhol-5-1-1"
+    },
+    {
+      id: "espanhol-q13",
+      enunciado: "Completa la frase: «Si mañana ___ buen tiempo, iremos en bicicleta al parque». Qual forma verbal completa corretamente a oração condicional provável?",
+      alternativas: ["hace", "haría", "hiciera", "hizo", "hacía"],
+      correta: 0,
+      explicacao: "Nas condições reais ou prováveis, o espanhol emprega si + presente do indicativo na oração condicional e futuro ou presente com valor futuro na principal: «Si mañana hace buen tiempo, iremos...». Haría e hiciera não correspondem a essa estrutura.",
+      topicoId: "espanhol-5-2-5"
+    },
+    {
+      id: "espanhol-q14",
+      enunciado: "Una campaña pública dice: «Cada gota cuenta: cierra el grifo mientras te cepillas los dientes». Qual recurso predomina na construção da mensagem?",
+      alternativas: ["Uso de linguagem técnica para explicar o ciclo hidrológico.", "Apelo direto ao leitor, com verbo no imperativo para orientar uma atitude.", "Relato retrospectivo de uma experiência individual.", "Descrição neutra, sem intenção de influenciar o comportamento.", "Uso de uma pergunta retórica para questionar a existência da água."],
+      correta: 1,
+      explicacao: "«Cierra» é uma forma de imperativo dirigida ao leitor, usada para incentivar uma ação concreta de economia de água. «Cada gota cuenta» reforça a importância de pequenas atitudes. A campanha tem finalidade persuasiva e instrucional.",
+      topicoId: "espanhol-5-2-8"
+    },
+    {
+      id: "espanhol-q15",
+      enunciado: "Lee el fragmento: «La exposición reúne fotografías de distintas generaciones. Algunas muestran calles que ya no existen; otras registran nuevas formas de convivencia en los barrios». Qual interpretação é mais adequada?",
+      alternativas: ["As fotografias provam que os bairros não passaram por transformações.", "A exposição apresenta apenas imagens de espaços rurais.", "O conjunto permite comparar mudanças urbanas e permanências nas formas de vida ao longo do tempo.", "As imagens foram produzidas exclusivamente para divulgar produtos comerciais.", "A exposição defende que toda transformação urbana deve ser impedida."],
+      correta: 2,
+      explicacao: "O fragmento reúne registros de diferentes gerações, incluindo ruas que desapareceram e novas formas de convivência. Isso permite observar transformações no espaço urbano e aspectos da vida coletiva ao longo do tempo, sem afirmar que tudo mudou ou permaneceu igual.",
+      topicoId: "espanhol-5-1-1"
     }
   ]
 };
