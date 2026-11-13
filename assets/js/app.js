@@ -876,6 +876,7 @@
     var registro = estado.quizzes[m.id] || null;
     var mapaTopicos = {};
     m.topicos.forEach(function (t) { mapaTopicos[t.id] = t; });
+    var desafio = questoes.filter(function (q) { return q.nivel === "desafio"; });
 
     main.innerHTML =
       '<header class="cabecalho-ferramenta">' +
@@ -886,7 +887,6 @@
       '<div class="quiz-area" id="quiz-area"></div>';
 
     var area = document.getElementById("quiz-area");
-    var desafio = questoes.filter(function (q) { return q.nivel === "desafio"; });
     var modoAtual = desafio.length ? "desafio" : "revisao";
     var perguntas = [];
     var atual = 0;
