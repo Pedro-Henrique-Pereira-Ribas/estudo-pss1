@@ -10,6 +10,18 @@
   var CHAVE = "pss1-caderno-v1";
   var LETRAS = ["A", "B", "C", "D", "E"];
 
+  var DISTRIBUICAO_OFICIAL_PSS1 = {
+    portugues: 12,
+    matematica: 10,
+    biologia: 8,
+    geografia: 8,
+    quimica: 8,
+    edfisica: 5,
+    ingles: 5,
+    espanhol: 0,
+    arte: 4
+  };
+
   var MATERIAS = Object.keys(DADOS)
     .map(function (id) { return DADOS[id]; })
     .filter(function (m) { return m && m.id && Array.isArray(m.topicos); })
@@ -1065,7 +1077,7 @@
     }, 0);
   }
 
-  function montarSimulado(quantidade, somenteDesafio) {
+  function montarSimulado(quantidade, somenteDesafio, quantidadesPorMateria) {
     var pools = MATERIAS
       .filter(function (m) { return (m.questoes || []).length; })
       .map(function (m) {
@@ -1077,6 +1089,21 @@
         }));
       })
       .filter(function (p) { return p.length; });
+
+    if (quantidadesPorMateria) {
+      var itens = [];
+      MATERIAS.forEach(function (m) {
+        var qtd = quantidadesPorMateria[m.id];
+        if (!qtd || qtd <= 0) return;
+        var pool = pools.find(function (p) { return p[0] && p[0].materia.id === m.id; });
+        if (!pool) return;
+        var pegar = Math.min(qtd, pool.length);
+        for (var i = 0; i < pegar; i++) {
+          if (pool.length) itens.push(pool.pop());
+        }
+      });
+      return embaralhar(itens);
+    }
 
     var itens = [];
     var indice = 0;
@@ -1107,6 +1134,11 @@
       return n <= totalModo && arr.indexOf(n) === i;
     });
 
+    var totalOficial = 0;
+    Object.keys(DISTRIBUICAO_OFICIAL_PSS1).forEach(function (id) {
+      totalOficial += DISTRIBUICAO_OFICIAL_PSS1[id];
+    });
+
     main.innerHTML =
       '<header class="cabecalho-ferramenta">' +
         '<nav class="migalhas" aria-label="Você está em"><a href="#/">Início</a><span aria-hidden="true">/</span><span>Simulado</span></nav>' +
@@ -1114,13 +1146,20 @@
       "</header>" +
       '<form class="config-simulado" id="form-simulado">' +
         '<fieldset class="campo-grupo" style="border:0;padding:0">' +
+          "<legend>Tipo de simulado</legend>" +
+          '<div class="opcoes-radio">' +
+            '<label class="opcao-radio"><input type="radio" name="tipoSimulado" value="geral" checked><span>Geral (escolher quantidade)</span></label>' +
+            '<label class="opcao-radio"><input type="radio" name="tipoSimulado" value="oficial"><span>Prova oficial PSS 1 · ' + totalOficial + ' questões (distribuição oficial)</span></label>' +
+          "</div>" +
+        "</fieldset>" +
+        '<fieldset class="campo-grupo" style="border:0;padding:0">' +
           "<legend>Nível</legend>" +
           '<div class="opcoes-radio">' +
             '<label class="opcao-radio"><input type="radio" name="nivel" value="desafio"' + (totalDesafio ? " checked" : " disabled") + '><span>Desafio PSS 1 · ' + (totalDesafio || "em breve") + '</span></label>' +
             '<label class="opcao-radio"><input type="radio" name="nivel" value="revisao"' + (totalDesafio ? "" : " checked") + '><span>Revisão geral · ' + total + '</span></label>' +
           "</div>" +
         "</fieldset>" +
-        '<fieldset class="campo-grupo" style="border:0;padding:0">' +
+        '<fieldset class="campo-grupo" style="border:0;padding:0" id="fieldset-quantidade">' +
           "<legend>Quantidade de questões</legend>" +
           '<div class="opcoes-radio">' +
             opcoesQtd.map(function (n, i) {
@@ -1148,18 +1187,25 @@
       form.addEventListener("submit", function (evento) {
         evento.preventDefault();
         var dadosForm = new FormData(form);
+        var tipoSimulado = dadosForm.get("tipoSimulado") || "geral";
         var nivel = dadosForm.get("nivel") === "desafio" && totalDesafio ? "desafio" : "revisao";
         var limiteModo = nivel === "desafio" ? totalDesafio : total;
-        var quantidade = Number(dadosForm.get("quantidade")) || Math.min(20, limiteModo);
-        var segundos = Number(dadosForm.get("tempo")) || 0;
-        var itens = montarSimulado(Math.min(quantidade, limiteModo), nivel === "desafio");
-        if (itens.length) iniciarSimulado(itens, segundos, nivel);
+        var itens;
+        if (tipoSimulado === "oficial") {
+          itens = montarSimulado(null, nivel === "desafio", DISTRIBUICAO_OFICIAL_PSS1);
+        } else {
+          var quantidade = Number(dadosForm.get("quantidade")) || Math.min(20, limiteModo);
+          var segundos = Number(dadosForm.get("tempo")) || 0;
+          itens = montarSimulado(Math.min(quantidade, limiteModo), nivel === "desafio");
+        }
+        if (itens.length) iniciarSimulado(itens, tipoSimulado === "oficial" ? 0 : (Number(dadosForm.get("tempo")) || 0), nivel, tipoSimulado);
       });
     }
   }
 
-  function iniciarSimulado(itens, segundosPorQuestao, nivel) {
+  function iniciarSimulado(itens, segundosPorQuestao, nivel, tipoSimulado) {
     nivel = nivel || "revisao";
+    tipoSimulado = tipoSimulado || "geral";
     var respostas = new Array(itens.length).fill(null);
     var atual = 0;
     var inicio = Date.now();
@@ -1169,7 +1215,7 @@
     main.innerHTML =
       '<header class="cabecalho-ferramenta">' +
         '<nav class="migalhas" aria-label="Você está em"><a href="#/">Início</a><span aria-hidden="true">/</span><span>Simulado</span></nav>' +
-        '<div><p class="olho">Simulado em andamento</p><h1 class="titulo-pagina">Simulado PSS 1</h1><p class="ferramenta-info">' + (nivel === "desafio" ? '<span class="pilula desafio">Desafio</span> · ' : "") + itens.length + " questões · " + (limite ? "tempo total de " + formatarTempo(limite / 1000) : "sem limite de tempo") + "</p></div>" +
+        '<div><p class="olho">Simulado em andamento</p><h1 class="titulo-pagina">Simulado PSS 1</h1><p class="ferramenta-info">' + (tipoSimulado === "oficial" ? '<span class="pilula desafio">Prova oficial PSS 1 · ' + itens.length + ' questões</span> · ' : "") + (nivel === "desafio" ? '<span class="pilula desafio">Desafio</span> · ' : "") + itens.length + " questões · " + (limite ? "tempo total de " + formatarTempo(limite / 1000) : "sem limite de tempo") + "</p></div>" +
         '<span class="cronometro" id="cronometro-simulado">' + ICONES.relogio + " <span>00:00</span></span>" +
       "</header>" +
       '<div class="quiz-area" id="simulado-area"></div>';
@@ -1259,6 +1305,7 @@
         porcento: porcento,
         tempo: tempoGastoSeg,
         nivel: nivel,
+        tipo: tipoSimulado,
         porMateria: porMateria
       });
       estado.simulados = estado.simulados.slice(0, 8);
@@ -1729,7 +1776,7 @@
       ? '<section class="secao"><div class="secao-cabecalho"><h2 class="titulo-secao">Simulados recentes</h2><a class="link-seta" href="#/simulado">Novo simulado ' + ICONES.setaDireita + "</a></div>" +
         '<div class="historico-simulados">' + estado.simulados.slice(0, 5).map(function (s) {
           return '<div class="item-historico">' +
-            "<strong>" + s.acertos + "/" + s.total + " · " + s.porcento + "%" + (s.nivel === "desafio" ? ' <span class="pilula desafio">Desafio</span>' : "") + "</strong>" +
+            "<strong>" + s.acertos + "/" + s.total + " · " + s.porcento + "%" + (s.nivel === "desafio" ? ' <span class="pilula desafio">Desafio</span>' : "") + (s.tipo === "oficial" ? ' <span class="pilula desafio">Oficial</span>' : "") + "</strong>" +
             "<span>" + formatarData(s.data) + " · " + formatarTempo(s.tempo || 0) + "</span>" +
           "</div>";
         }).join("") + "</div></section>"
